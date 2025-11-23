@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photo Album</title>
+  <style>
+    :root{
+      --bg:#0f1724; /* deep navy */
+      --card:#0b1220;
+      --accent:#ff5a7a;
+      --muted:#9ba4b2;
+      --radius:14px;
+      --gap:16px;
+      --max-width:1100px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#071024);color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+    .wrap{width:100%;max-width:var(--max-width)}
+
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    .hero{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-bottom:20px}
+    .hero .photo{position:relative;border-radius:var(--radius);overflow:hidden;min-height:300px;background:linear-gradient(180deg,#0b1220 0%, #071022 100%);box-shadow:0 8px 30px rgba(0,0,0,.6);cursor:pointer}
+    .hero img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1);transition:transform .5s}
+    .hero .photo:hover img{transform:scale(1.04)}
+    .overlay{position:absolute;left:12px;bottom:12px;background:rgba(2,6,23,.6);backdrop-filter:blur(4px);padding:8px 12px;border-radius:999px;display:flex;gap:8px;align-items:center}
+    .heart{width:44px;height:44px;border-radius:999px;background:linear-gradient(135deg,var(--accent),#ff7aa0);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(255,90,122,.18);font-weight:700}
+    .label{font-size:14px}
+
+    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:var(--gap)}
+    .tile{border-radius:12px;overflow:hidden;background:var(--card);min-height:120px;position:relative;cursor:pointer}
+    .tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+    .tile:hover img{transform:scale(1.06)}
+
+    /* modal lightbox */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(1,6,15,.7);z-index:60}
+    .modal.open{display:flex}
+    .modal .inner{max-width:92%;max-height:92%;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(2,6,23,.8);background:#071022}
+    .modal img{display:block;max-width:100%;max-height:80vh;object-fit:contain}
+    .close{position:absolute;right:18px;top:18px;background:rgba(0,0,0,.45);border-radius:999px;padding:8px 10px;font-size:18px;border:0;color:#fff;cursor:pointer}
+
+    footer{margin-top:16px;color:var(--muted);font-size:13px}
+
+    @media (max-width:640px){
+      .hero{grid-template-columns:1fr}
+      .hero .photo{min-height:220px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+        <img src="photos/arj.jpg" alt="Profile" style="width:52px;height:52px;border-radius:10px;object-fit:cover;" />
+      <!-- <div style="width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,#0b1220,#081226);display:flex;align-items:center;justify-content:center;font-weight:700"></div> -->
+      <div>
+        <h1>Yaseen Album</h1>
+        <p>Top two photos are the "Love" pair </p>
+      </div>
+    </header>
+
+    <!-- HERO: two love photos side-by-side -->
+    <section class="hero" aria-label="Top love photos">
+      <div class="photo" data-caption="Love — Sunset Beach" tabindex="0">
+        <img src="photos/yas1.jpg" alt="Love photo 1" loading="lazy">
+        <div class="overlay">
+          <div class="heart">❤</div>
+          <div class="label">Love — Merin</div>
+        </div>
+      </div>
+
+      <div class="photo" data-caption="Love — City Lights" tabindex="0">
+        <img src="photos/adi.jpg" alt="Love photo 2" loading="lazy">
+        <div class="overlay">
+          <div class="heart">❤</div>
+          <div class="label">Love — Yaseen Ikka</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY: rest of photos -->
+    <section class="gallery" aria-label="Gallery of photos">
+      <!-- Example tiles. Replace src with your own images. -->
+      <div class="tile" data-caption="Day at the lake"><img src="photos/yas2.PNG" alt="photo 3" loading="lazy"></div>
+      <div class="tile" data-caption="Mountain trail"><img src="photos/yas3.PNG" alt="photo 4" loading="lazy"></div>
+      <div class="tile" data-caption="Coffee morning"><img src="photos/yas4.PNG" alt="photo 5" loading="lazy"></div>
+      <div class="tile" data-caption="Street art"><img src="photos/yas5.jpg" alt="photo 6" loading="lazy"></div>
+      <div class="tile" data-caption="Quiet forest"><img src="photos/yas6.jpg" alt="photo 7" loading="lazy"></div>
+      <div class="tile" data-caption="Night skyline"><img src="photos/yas7.jpg" alt="photo 8" loading="lazy"></div>
+      <!-- <div class="tile" data-caption="Desert road"><img src="https://source.unsplash.com/random/800x600?sig=17" alt="photo 9" loading="lazy"></div>
+      <div class="tile" data-caption="Flower field"><img src="https://source.unsplash.com/random/800x600?sig=18" alt="photo 10" loading="lazy"></div> -->
+    </section>
+
+    <footer>Yaseen Loves Merin @ 2025</footer>
+  </div>
+
+  <!-- Modal / Lightbox -->
+  <div class="modal" id="modal" role="dialog" aria-hidden="true">
+    <div class="inner" id="modalInner">
+      <button class="close" id="closeBtn" aria-label="Close">✕</button>
+      <img src="" alt=""> 
+    </div>
+  </div>
+
+  <script>
+    // Open images in a simple lightbox modal
+    const modal = document.getElementById('modal');
+    const modalImg = modal.querySelector('img');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function openLightbox(src, alt){
+      modalImg.src = src;
+      modalImg.alt = alt || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      modalImg.src = '';
+    }
+
+    // Bind clicks for hero and tiles
+    document.querySelectorAll('.photo, .tile').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const img = el.querySelector('img');
+        openLightbox(img.src, el.dataset.caption || img.alt || 'Photo');
+      });
+      el.addEventListener('keypress', (e)=>{ if(e.key === 'Enter') el.click(); });
+    });
+
+    // Close handlers
+    closeBtn.addEventListener('click', closeLightbox);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeLightbox(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
